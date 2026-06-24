@@ -16,6 +16,12 @@
 // Global network limit: 10 MB maximum frame size
 #define RAFT_MAX_FRAME_SIZE (1024 * 1024 * 10)
 
+// Maximum number of entries allowed in a single physical network packet
+#define RAFT_CODEC_MAX_ENTRIES 1000
+
+// Maximum number of peers allowed in a serialized ConfState array
+#define RAFT_CODEC_MAX_PEERS 128
+
 #ifdef __cplusplus
 extern "C" {
 #endif

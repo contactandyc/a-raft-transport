@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "raft_internal.h"
+#include "a-raft-transport/raft_codec.h"
 #include "the-macro-library/macro_test.h"
 
 MACRO_TEST(codec_roundtrips_basic_message) {

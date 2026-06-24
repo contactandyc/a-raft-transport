@@ -3,7 +3,7 @@
 //
 // Maintainer: Andy Curtis <contactandyc@gmail.com>
 
-#include "raft_internal.h"
+#include "a-raft-transport/raft_codec.h"
 #include <string.h>
 #include <stdlib.h>
 
@@ -120,7 +120,7 @@ bool raft_msg_encoded_size_checked(const raft_msg_t* msg, size_t* out) {
 
     if (!msg || !out) return false;
     if (msg->num_entries > RAFT_MAX_MSG_ENTRIES) return false;
-    if (msg->snapshot_num_peers > MAX_PEERS) return false;
+    if (msg->snapshot_num_peers > RAFT_CODEC_MAX_PEERS) return false;
     if (msg->num_entries > UINT32_MAX) return false;
     if (msg->snapshot_len > UINT32_MAX) return false;
     if (msg->snapshot_num_peers > UINT32_MAX) return false;
@@ -248,7 +248,7 @@ bool raft_msg_decode(const uint8_t* buf, size_t len, raft_msg_t* out_msg) {
     if (reject_val > 1) goto decode_fail;
     if (snap_done > 1) goto decode_fail;
     if (num_entries > RAFT_MAX_MSG_ENTRIES) goto decode_fail;
-    if (num_peers > MAX_PEERS) goto decode_fail;
+    if (num_peers > RAFT_CODEC_MAX_PEERS) goto decode_fail;
 
     out_msg->type = (msg_type_t)type_val;
     out_msg->reject = (reject_val != 0);

@@ -31,6 +31,9 @@ RUN apt-get update && apt-get install -y \
     gdb \
     libtool \
     perl \
+    python3 \
+    python3-pip \
+    python3-venv \
     valgrind \
  && rm -rf /var/lib/apt/lists/*
 
@@ -55,6 +58,11 @@ RUN useradd --create-home --shell /bin/bash dev && \
 USER dev
 WORKDIR /workspace
 
+# --- Optional Python venv for tools ------------------------------------------
+RUN sudo python3 -m venv /opt/venv && \
+    sudo chown -R dev:dev /opt/venv && \
+    /opt/venv/bin/pip install --upgrade pip
+ENV PATH="/opt/venv/bin:${PATH}"
 
 # --- Build & install libuv ---
 RUN set -eux; \
@@ -106,12 +114,20 @@ RUN set -eux; \
     ./build.sh install; \
     cd ..; \
     rm -rf "h2o-c-library"
+# --- Build & install a-raft-core ---
+RUN set -eux; \
+    git clone --depth 1 --single-branch "https://github.com/contactandyc/a-raft-core.git" "a-raft-core"; \
+    cd "a-raft-core"; \
+    ./build.sh clean && \
+    ./build.sh install; \
+    cd ..; \
+    rm -rf "a-raft-core"
 
 # --- Build & install this project --------------------------------------------
-COPY --chown=dev:dev . /workspace/a-raft-core
-RUN mkdir -p /workspace/build/a-raft-core && \
-    cd /workspace/build/a-raft-core && \
-    cmake /workspace/a-raft-core && \
+COPY --chown=dev:dev . /workspace/a-raft-transport
+RUN mkdir -p /workspace/build/a-raft-transport && \
+    cd /workspace/build/a-raft-transport && \
+    cmake /workspace/a-raft-transport && \
     make -j"$(nproc)" && sudo make install
 
 CMD ["/bin/bash"]

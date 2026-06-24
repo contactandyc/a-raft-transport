@@ -1,6 +1,6 @@
 # BUILDING
 
-This project: **a-raft-core**
+This project: **a-raft-transport**
 Version: **0.1.4**
 
 ## Local build
@@ -35,7 +35,7 @@ sudo apt-get update && sudo apt-get install -y libssl-dev zlib1g-dev
 ### Development tooling (optional)
 
 ```bash
-sudo apt-get update && sudo apt-get install -y autoconf automake gdb libtool perl valgrind
+sudo apt-get update && sudo apt-get install -y autoconf automake gdb libtool perl python3 python3-pip python3-venv valgrind
 ```
 
 
@@ -144,5 +144,19 @@ cd "h2o-c-library"
 ./build.sh install
 cd ..
 rm -rf "h2o-c-library"
+```
+
+
+### a-raft-core
+
+Clone & build:
+
+```bash
+git clone --depth 1 --single-branch "https://github.com/contactandyc/a-raft-core.git" "a-raft-core"
+cd "a-raft-core"
+./build.sh clean
+./build.sh install
+cd ..
+rm -rf "a-raft-core"
 ```
 
